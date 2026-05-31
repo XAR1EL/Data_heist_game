@@ -26,14 +26,20 @@ jobs:
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3
 
-    - name: Install Global Cordova (Pinned Stable Version)
+    - name: Install Global Cordova
       run: npm install -g cordova@12.0.0
 
-    - name: Clean and Prepare Cordova Android Platform
+    - name: Prepare Cordova Workspace and Fix Module Type Clash
       run: |
         cd data-heist-slot
+        # Strip out the module type rule temporarily so Cordova can parse the project files
+        sed -i 's/"type": "module",//g' package.json
+        
+        # Clean out old failed directory remnants
         rm -rf platforms/
         rm -rf plugins/
+        
+        # Build out clean native Android architecture layers
         cordova platform add android@12.0.0 --no-telemetry
         
     - name: Compile APK
