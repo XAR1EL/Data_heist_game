@@ -17,13 +17,21 @@ jobs:
       with:
         node-version: 18.x
 
-    - name: Set up Java JDK
+    # Install Java 11 first so it's cached on the system path
+    - name: Pre-cache Java 11
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '11'
 
-    - name: Setup Gradle (Fixed Stable Version)
+    # Set system default to Java 17 so the SDK installer is happy
+    - name: Set up System Java JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
       with:
         gradle-version: '7.6'
@@ -42,9 +50,11 @@ jobs:
         rm -rf plugins/
         cordova platform add android@12.0.0 --no-telemetry
         
-    - name: Compile APK
+    - name: Compile APK (Targeting Java 11)
       run: |
         cd data-heist-slot
+        # Point Cordova specifically to the Java 11 installation path to build perfectly
+        export CORDOVA_JAVA_HOME=$JAVA_HOME_11_X64
         cordova build android --release --no-telemetry
 
     - name: Upload APK
