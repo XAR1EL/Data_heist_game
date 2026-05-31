@@ -21,11 +21,15 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        # Bumped to match modern Capacitor compilation targets
         java-version: '21'
 
     - name: Set up Android SDK Baseline
       uses: android-actions/setup-android@v3
+
+    # Force install the matching build tools inside the runner container
+    - name: Ensure Build Tools Presence
+      run: |
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME "build-tools;33.0.2"
 
     - name: Compile and Sync Assets
       run: |
@@ -34,13 +38,26 @@ jobs:
         npm run build
         npx cap sync
 
-    - name: Compile APK via Gradle
+    - name: Compile Unsigned APK via Gradle
       run: |
         cd data-heist-slot/android
         ./gradlew assembleRelease
 
-    - name: Upload APK
+    - name: Automatically Optimize and Sign APK
+      run: |
+        cd data-heist-slot/android/app/build/outputs/apk/release/
+        
+        # 1. Align the package
+        zipalign -v 4 app-release-unsigned.apk data-heist-aligned.apk
+        
+        # 2. Generate temporary keystore credentials
+        keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+        
+        # 3. Seal the payload with a valid signature
+        apksigner sign --ks debug.keystore --ks-pass pass:android --out data-heist-playable.apk data-heist-aligned.apk
+
+    - name: Upload Playable Signed APK
       uses: actions/upload-artifact@v4
       with:
-        name: data-heist-slot-apk
-        path: data-heist-slot/android/app/build/outputs/apk/release/app-release-unsigned.apk
+        name: data-heist-playable-apk
+        path: data-heist-slot/android/app/build/outputs/apk/release/data-heist-playable.apk
