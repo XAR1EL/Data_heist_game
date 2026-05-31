@@ -15,14 +15,14 @@ jobs:
     - name: Set up Modern Node.js
       uses: actions/setup-node@v4
       with:
-        # Bumped to satisfy Capacitor CLI requirements
         node-version: 22.x
 
-    - name: Set up Modern Java JDK
+    - name: Set up Java JDK 21
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        # Bumped to match modern Capacitor compilation targets
+        java-version: '21'
 
     - name: Set up Android SDK Baseline
       uses: android-actions/setup-android@v3
