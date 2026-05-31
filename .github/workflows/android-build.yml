@@ -25,13 +25,17 @@ jobs:
       run: npm install -g cordova
 
     - name: Prepare Cordova Android Platform
-      run: cordova platform add android --no-telemetry
+      run: |
+        cd data-heist-slot
+        cordova platform add android --no-telemetry
         
     - name: Compile APK
-      run: cordova build android --release --no-telemetry
+      run: |
+        cd data-heist-slot
+        cordova build android --release --no-telemetry
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: data-heist-slot-local-apk
-        path: platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+        path: data-heist-slot/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
