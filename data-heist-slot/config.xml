@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.x3r0phyt3.dataheist" version="1.0.0" xmlns="http://www.w3.org/ns/widgets">
+    <name>Data Heist Slot</name>
+    <description>Standalone Native Compilation</description>
+    <author email="dev@x3r0phyt3.com">X3R0PHYT3</author>
+    <content src="index.html" />
+    <preference name="FullScreen" value="true" />
+    <preference name="Orientation" value="portrait" />
+</widget>

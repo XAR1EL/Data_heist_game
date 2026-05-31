@@ -1,0 +1,6 @@
+{
+  "name": "Data Heist Slot",
+  "description": "High-performance cyberpunk cascade slot game optimized for standalone mobile portrait viewports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
