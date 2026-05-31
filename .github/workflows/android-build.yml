@@ -21,7 +21,12 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '11'
+
+    - name: Setup Gradle (Fixed Stable Version)
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: '7.6'
 
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3
@@ -29,17 +34,12 @@ jobs:
     - name: Install Global Cordova
       run: npm install -g cordova@12.0.0
 
-    - name: Prepare Cordova Workspace and Fix Module Type Clash
+    - name: Bypass Module Type Clash & Prepare Workspace
       run: |
         cd data-heist-slot
-        # Strip out the module type rule temporarily so Cordova can parse the project files
         sed -i 's/"type": "module",//g' package.json
-        
-        # Clean out old failed directory remnants
         rm -rf platforms/
         rm -rf plugins/
-        
-        # Build out clean native Android architecture layers
         cordova platform add android@12.0.0 --no-telemetry
         
     - name: Compile APK
@@ -52,4 +52,3 @@ jobs:
       with:
         name: data-heist-slot-local-apk
         path: data-heist-slot/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
-# Force run timestamp: Sun May 31 11:37:30 UTC 2026
