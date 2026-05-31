@@ -52,3 +52,4 @@ jobs:
       with:
         name: data-heist-slot-local-apk
         path: data-heist-slot/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+# Force run timestamp: Sun May 31 11:37:30 UTC 2026
