@@ -12,10 +12,11 @@ jobs:
     - name: Checkout Source Code
       uses: actions/checkout@v4
 
-    - name: Set up Node.js
+    - name: Set up Modern Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 20.x
+        # Bumped to satisfy Capacitor CLI requirements
+        node-version: 22.x
 
     - name: Set up Modern Java JDK
       uses: actions/setup-java@v4
